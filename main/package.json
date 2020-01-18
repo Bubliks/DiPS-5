@@ -1,0 +1,30 @@
+{
+  "name": "DIPS",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node ./server/app.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "bull": "^3.12.1",
+    "cors": "^2.8.5",
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1",
+    "heroku": "^7.35.0",
+    "jest": "^24.9.0",
+    "mysql2": "^2.0.2",
+    "node-fetch": "^2.6.0",
+    "pg": "^7.14.0",
+    "pg-hstore": "^2.3.3",
+    "redis": "^2.8.0",
+    "redis-server": "^1.2.2",
+    "sequelize": "^5.19.2",
+    "sequelize-cli": "^5.5.1",
+    "supertest": "^4.0.2",
+    "winston": "^3.1.0"
+  },
+  "engines": {
+    "node": "8.16.x",
+    "npm": "6.4.x"
+  }
+}

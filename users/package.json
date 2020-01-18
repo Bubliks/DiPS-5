@@ -1,0 +1,34 @@
+{
+  "name": "DIPS",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node ./server/app.js",
+    "test": "jest --forceExit",
+    "pretest": "NODE_ENV=test npm run migrate",
+    "migrate": "npx sequelize-cli db:migrate",
+    "db:create": "npx sequelize-cli db:create",
+    "db:drop": "npx sequelize-cli db:drop",
+    "db:seed:all": "npx sequelize-cli db:seed:all",
+    "db:makeUser": "npx sequelize-cli model:generate --name User --attributes name:string,password:string,age:number,mail:string --force",
+    "migrate:reset": "npx sequelize-cli db:migrate:undo:all && npm run migrate",
+    "heroku:db-migrate": "heroku run sequelize db:migrate --env production --app dips-iu7"
+  },
+  "dependencies": {
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1",
+    "heroku": "^7.35.0",
+    "jest": "^24.9.0",
+    "mysql2": "^2.0.2",
+    "pg": "^7.14.0",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^5.19.2",
+    "sequelize-cli": "^5.5.1",
+    "supertest": "^4.0.2",
+    "winston": "^3.1.0",
+    "winston-daily-rotate-file": "^4.4.1"
+  },
+  "engines": {
+    "node": "8.16.x",
+    "npm": "6.4.x"
+  }
+}

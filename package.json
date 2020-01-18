@@ -1,0 +1,10 @@
+{
+  "name": "DIPS-2",
+  "version": "1.0.0",
+  "scripts": {
+    "install": "cd users; npm i; cd ../tasks; npm i; cd ../events; npm i;",
+    "test": "cd users; npm test; cd ../tasks; npm test; cd ../events; npm test;"
+  },
+  "author": "Alex",
+  "license": "MIT"
+}

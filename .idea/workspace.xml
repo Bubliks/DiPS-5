@@ -2,36 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="01206439-e723-4646-9759-d155974bce5e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/auth/.sequelizerc" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth/db/config/config.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth/db/migrations/20191208171100-create-user.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth/db/migrations/20191208203451-create-user.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth/db/migrations/20200116113930-create-event.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth/db/models/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth/package-lock.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth/package.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth/server/app.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth/server/controllers/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth/server/routes/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth/yarn.lock" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/session/.sequelizerc" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/session/db/config/config.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/session/db/migrations/20200110204606-create-task.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/session/db/models/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/session/package-lock.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/session/package.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/session/server/app.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/session/server/controllers/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/session/server/routes/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main/server/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/main/server/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main/server/controllers/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/main/server/controllers/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main/server/routes/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/main/server/routes/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tasks/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/tasks/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tasks/server/controllers/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/tasks/server/controllers/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tasks/server/routes/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/tasks/server/routes/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/users/server/routes/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/users/server/routes/index.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -47,11 +18,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/session/server/controllers/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="290">
-              <caret line="241" column="37" lean-forward="true" selection-start-line="241" selection-start-column="37" selection-end-line="241" selection-end-column="37" />
+            <state relative-caret-position="240">
+              <caret line="237" column="26" lean-forward="true" selection-start-line="237" selection-start-column="26" selection-end-line="237" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -59,7 +30,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main/server/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
+            <state relative-caret-position="-314">
               <caret line="13" selection-start-line="13" selection-end-line="13" />
             </state>
           </provider>
@@ -83,11 +54,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main/server/controllers/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="173">
-              <caret line="102" column="55" selection-start-line="102" selection-start-column="45" selection-end-line="102" selection-end-column="55" />
+            <state relative-caret-position="369">
+              <caret line="162" lean-forward="true" selection-start-line="162" selection-end-line="162" />
             </state>
           </provider>
         </entry>
@@ -163,8 +134,8 @@
         <option value="$PROJECT_DIR$/main/server/routes/index.js" />
         <option value="$PROJECT_DIR$/tasks/server/routes/index.js" />
         <option value="$PROJECT_DIR$/session/server/routes/index.js" />
-        <option value="$PROJECT_DIR$/main/server/controllers/index.js" />
         <option value="$PROJECT_DIR$/session/server/controllers/index.js" />
+        <option value="$PROJECT_DIR$/main/server/controllers/index.js" />
       </list>
     </option>
   </component>
@@ -256,6 +227,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/auth" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
@@ -295,12 +267,12 @@
       <workItem from="1579450176868" duration="31307000" />
       <workItem from="1580170356130" duration="432000" />
       <workItem from="1580170798900" duration="12000" />
-      <workItem from="1580170829472" duration="5792000" />
+      <workItem from="1580170829472" duration="6382000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="42136000" />
+    <option name="totallyTimeSpent" value="42726000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -315,7 +287,7 @@
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24947146" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24947146" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -329,7 +301,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Favorites" order="10" weight="0.32891566" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.4" />
+      <window_info anchor="bottom" id="Terminal" order="11" visible="true" weight="0.4" />
       <window_info anchor="bottom" id="TypeScript" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -567,24 +539,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main/server/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" selection-start-line="13" selection-end-line="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/session/server/app.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="7" column="17" selection-start-line="7" selection-start-column="10" selection-end-line="7" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main/server/controllers/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="173">
-          <caret line="102" column="55" selection-start-line="102" selection-start-column="45" selection-end-line="102" selection-end-column="55" />
         </state>
       </provider>
     </entry>
@@ -604,8 +562,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/session/server/controllers/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="290">
-          <caret line="241" column="37" lean-forward="true" selection-start-line="241" selection-start-column="37" selection-end-line="241" selection-end-column="37" />
+        <state relative-caret-position="240">
+          <caret line="237" column="26" lean-forward="true" selection-start-line="237" selection-start-column="26" selection-end-line="237" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main/server/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-314">
+          <caret line="13" selection-start-line="13" selection-end-line="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main/server/controllers/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="369">
+          <caret line="162" lean-forward="true" selection-start-line="162" selection-end-line="162" />
         </state>
       </provider>
     </entry>

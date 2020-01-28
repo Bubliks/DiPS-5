@@ -136,62 +136,20 @@ const getAllTasks = async (req, res) => {
                                 res.status(status).json(body)
                             });
                         });
+                    } else {
+                        const status = response.status;
+                        response.json().then(body => (
+                            res.status(status).json(body)
+                        ));
                     }
-                });
+                }).catch(err => {
+                    return res.status(400).json(err)
+                })
             }
-            // const status = response.status;
-            // response.json().then(body => (
-            //     res.status(status).json(body)
-            // ));
         })
         .catch((error) => {
-            return res.status(400).send(error.message);
+            return res.status(400).json(error.message);
         });
-
-//     const body = await response.json();
-//     if (response.status === 449) {
-//         story_token = body.token;
-//         const response2 = await getStories(pageNo, size, story_token);
-//         const body2 = await response2.json();
-//         return res
-//             .status(response2.status)
-//             .send(body2);
-//     }
-//
-//     if (body.message === "expired token") {
-//         const result_refresh = await fetch("http://localhost:3007/token/" + story_token + "/service/Story", {
-//             method: "patch",
-//             headers: {'Content-Type': 'application/json'},
-//         });
-//         const body_refresh = await result_refresh.json();
-//         story_token = body_refresh.token;
-//         const response2 = await getStories(pageNo, size, story_token);
-//         const body2 = await response2.json();
-//         return res
-//             .status(response2.status)
-//             .send(body2);
-//     }
-//
-//     winston_logger.info(winston_messages.OK);
-//     return res
-//         .status(response.status)
-//         .send(body);
-//
-// } catch (error) {
-//     winston_logger.error(winston_messages.CATCH + error.message);
-//     winston_logger.error(winston_messages.ERROR);
-//
-//     return res
-//         .status(400)
-//         .send(createError(error.message));
-// }
-
-    // tasks.getAllTasks(id)
-    //     .then((tasks) =>{
-    //         console.log(tasks);
-    //         return res.status(200).json(tasks)
-    //     })
-    //     .catch(() => (res.status(500).json({message: 'something error'})));
 };
 
 const getAllEvents = async (req, res) => {

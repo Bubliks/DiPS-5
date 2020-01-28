@@ -2,19 +2,18 @@
   "name": "DIPS",
   "version": "1.0.0",
   "scripts": {
-    "start": "NODE_ENV=development KEY=tkey SECRET=tasks node ./server/app.js",
-    "test": "jest --forceExit",
+    "start": "node ./server/app.js",
     "redis": "redis-server",
-    "pretest": "NODE_ENV=test npm run migrate",
     "migrate": "npx sequelize-cli db:migrate",
     "db:create": "npx sequelize-cli db:create",
     "db:drop": "npx sequelize-cli db:drop",
     "db:seed:all": "npx sequelize-cli db:seed:all",
-    "db:makeUser": "npx sequelize-cli model:generate --name User --attributes name:string,password:string,age:number,mail:string --force",
+    "db:makeUser": "npx sequelize-cli model:generate --name Session --attributes userId:string,serviceName:string,appId:string,appSecret:string,code:string,token:string,refreshToken:string,date:string --force",
     "migrate:reset": "npx sequelize-cli db:migrate:undo:all && npm run migrate",
     "heroku:db-migrate": "heroku run sequelize db:migrate --env production --app dips-iu7"
   },
   "dependencies": {
+    "dayjs": "^1.8.19",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
     "heroku": "^7.35.0",
@@ -26,6 +25,7 @@
     "sequelize": "^5.21.3",
     "sequelize-cli": "^5.5.1",
     "supertest": "^4.0.2",
+    "uuid-token-generator": "^1.0.0",
     "winston": "^3.1.0",
     "yargs": "^15.1.0"
   },

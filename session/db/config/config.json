@@ -1,0 +1,26 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "123",
+    "database": "dev",
+    "host": "127.0.0.1",
+    "port": "5433",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "postgres",
+    "password": "123",
+    "database": "test",
+    "host": "127.0.0.1",
+    "port": "5433",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "vxgenzgmwfnekf",
+    "password": "347c679124365d50031de4017cb0cc0832070f4fd6e60e6f8620311be4b987d1",
+    "database": "dcp977csqbhcje",
+    "host": "ec2-23-21-115-109.compute-1.amazonaws.com",
+    "dialect": "postgres",
+    "operatorsAliases": "0"
+  }
+}

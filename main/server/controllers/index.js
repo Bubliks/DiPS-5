@@ -3,6 +3,12 @@ const tasks = require('./tasks');
 const events = require('./events');
 const {Bull, defaultBullOptions} = require('./../libs/bull');
 const requestsQueue = new Bull('requests-queue', defaultBullOptions);
+const fetch = require("node-fetch");
+
+let userToken;
+let eventsToken;
+let tasksToken;
+
 
 requestsQueue.process(async (job, done) => {
     let request;
@@ -76,29 +82,116 @@ const getEventsAndTasks = async (req, res) => {
 
 const getAllTasks = async (req, res) => {
     const {
-        name
-    } = req.body;
+        id
+    } = req.params;
 
-    if (!name) {
-        return res.status(400).json({message: 'username is empty'});
+    if (!id) {
+        return res.status(400).json({message: 'id is empty'});
     }
+    console.log('!KEY_____SECRET!', process.env.task_key, process.env.task_secret);
 
-    // console.log('ok', title, description, name);
+    await fetch(`http://localhost:8002/tasks/all/user/${id}?key=${process.env.task_key}&secret=${process.env.task_secret}&token=${tasksToken}`, {
+        method: 'get',
+        headers: {'Content-Type': 'application/json'}})
+        .then(async response => {
+            console.log('first response status', response.status);
+            if (response.status === 449) {
+                console.log('response');
+                await response.json().then(async body => {
+                    console.log('first response body', body);
+                    tasksToken = body.token;
+                    console.log('token is ', tasksToken);
 
-    users.userByName(name)
-        .then(user => {
-            console.log('user', user);
-            tasks.getAllTasks(user.id)
-                .then((tasks) =>{
-                    console.log(tasks);
-                    return res.status(200).json(tasks)
-                })
-                .catch(() => (res.status(500).json({message: 'something error'})));
+                    await fetch(`http://localhost:8002/tasks/all/user/${id}?key=${process.env.task_key}&secret=${process.env.task_secret}&token=${tasksToken}`, {
+                        method: 'get',
+                        headers: {'Content-Type': 'application/json'}})
+                        .then(response => {
+                            const status = response.status;
+                            response.json().then(body => res.status(status).json(body));
+                        })
+                    }
+                );
+            } else {
+                console.log('second');
+                response.json().then(async body => {
+                    console.log('second response message', body.message);
+                    if (body.message === "expired token") {
+                        await fetch("http://localhost:8007/session/token/" + tasksToken + "/service/Tasks", {
+                            method: "post",
+                            headers: {'Content-Type': 'application/json'},
+                        }).then(response => {
+                            const status = response.status;
+
+                            response.json().then(async body => {
+                                tasksToken = body.token;
+
+                                await fetch(`http://localhost:8002/tasks/all/user/${id}?key=${process.env.task_key}&secret=${process.env.task_secret}&token=${tasksToken}`, {
+                                    method: 'get',
+                                    headers: {'Content-Type': 'application/json'}})
+                                    .then(response => {
+                                        const status = response.status;
+                                        response.json().then(body => res.status(status).json(body));
+                                    });
+
+                                res.status(status).json(body)
+                            });
+                        });
+                    }
+                });
+            }
+            // const status = response.status;
+            // response.json().then(body => (
+            //     res.status(status).json(body)
+            // ));
         })
-        .catch(error => {
-            console.log(error);
-            return res.status(500).json({message: 'something error'});
+        .catch((error) => {
+            return res.status(400).send(error.message);
         });
+
+//     const body = await response.json();
+//     if (response.status === 449) {
+//         story_token = body.token;
+//         const response2 = await getStories(pageNo, size, story_token);
+//         const body2 = await response2.json();
+//         return res
+//             .status(response2.status)
+//             .send(body2);
+//     }
+//
+//     if (body.message === "expired token") {
+//         const result_refresh = await fetch("http://localhost:3007/token/" + story_token + "/service/Story", {
+//             method: "patch",
+//             headers: {'Content-Type': 'application/json'},
+//         });
+//         const body_refresh = await result_refresh.json();
+//         story_token = body_refresh.token;
+//         const response2 = await getStories(pageNo, size, story_token);
+//         const body2 = await response2.json();
+//         return res
+//             .status(response2.status)
+//             .send(body2);
+//     }
+//
+//     winston_logger.info(winston_messages.OK);
+//     return res
+//         .status(response.status)
+//         .send(body);
+//
+// } catch (error) {
+//     winston_logger.error(winston_messages.CATCH + error.message);
+//     winston_logger.error(winston_messages.ERROR);
+//
+//     return res
+//         .status(400)
+//         .send(createError(error.message));
+// }
+
+    // tasks.getAllTasks(id)
+    //     .then((tasks) =>{
+    //         console.log(tasks);
+    //         return res.status(200).json(tasks)
+    //     })
+    //     .catch(() => (res.status(500).json({message: 'something error'})));
 };
 
 const getAllEvents = async (req, res) => {

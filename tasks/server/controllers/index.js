@@ -20,12 +20,18 @@ const createTask = async (req, res) => {
 };
 
 const allTasks = async (req, res) => {
+    const {
+        id: userId
+    } = req.params;
+
     try {
+        console.log('find tasks for userid: ', userId);
         const data = await db.Task.findAll({
             where: {
-                userId: req.params.id
+                userId
             }
         });
+        console.log('finded - ok ');
         return res.status(200).json(data);
     } catch (error) {
         logger.log("info", `fail ${error}`);

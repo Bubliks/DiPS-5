@@ -2,6 +2,8 @@ const express = require('express');
 const routes = require('./routes/index.js');
 const app = express();
 
+const port = process.env.PORT || 8009;
+
 const enableCors = true;
 
 if (enableCors) {
@@ -45,14 +47,8 @@ if (enableCors) {
     app.use(cors(corsOptions));
 }
 
-const port = process.env.PORT || 8000;
-
 app.use(express.json());
-app.use('/api', routes);
+app.use('/auth', routes);
 
-app.get('/', function (req, res) {
-    res.send('Homepage');
-});
 
 module.exports = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
-

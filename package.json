@@ -1,9 +1,15 @@
 {
-  "name": "DIPS-2",
+  "name": "DIPS-5",
   "version": "1.0.0",
   "scripts": {
     "install": "cd users; npm i; cd ../tasks; npm i; cd ../events; npm i;",
-    "test": "cd users; npm test; cd ../tasks; npm test; cd ../events; npm test;"
+    "test": "cd users; npm test; cd ../tasks; npm test; cd ../events; npm test;",
+    "start_users": "KEY=ukey SECRET=users node users/server/app.js",
+    "start_events": "KEY=ekey SECRET=events NODE_ENV=develop node events/server/app.js",
+    "start_tasks": "KEY=tkey SECRET=tasks NODE_ENV=develop node events/server/app.js",
+    "start_gateway": "NODE_ENV=develop node main/server/app.js",
+    "start_redis": "redis-server",
+    "start": "user_key=ukey user_secret=users event_key=ekey event_secret=events task_key=tkey task_secret=tasks PORT=8000 node main/server/app.js"
   },
   "author": "Alex",
   "license": "MIT"

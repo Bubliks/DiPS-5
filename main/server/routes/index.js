@@ -96,8 +96,8 @@ router.get('/all/from/:from/to/:to', circuitBreakerUserMiddleware, controllers.u
 router.get('/all', circuitBreakerUserMiddleware, controllers.users.all);
 
 // tasks 3, 6, 7
-router.post('/allEventsAndTasks', controllers.getEventsAndTasks);
-router.post('/convertTaskToEvent', controllers.convertTaskToEvent);
-router.post('/convertEventToTask', controllers.convertEventToTask);
+router.post('/allEventsAndTasks', publicMiddleware, controllers.getEventsAndTasks);
+router.post('/convertTaskToEvent', publicMiddleware, controllers.convertTaskToEvent);
+router.post('/convertEventToTask', publicMiddleware, controllers.convertEventToTask);
 
 module.exports = router;

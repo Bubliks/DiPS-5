@@ -2,7 +2,7 @@ const express = require('express');
 const routes = require('./routes/index.js');
 const app = express();
 
-const enableCors = true;
+const enableCors = false;
 
 if (enableCors) {
     const cors = require('cors');

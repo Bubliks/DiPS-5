@@ -138,9 +138,8 @@ const getAllTasks = async (req, res) => {
                         });
                     } else {
                         const status = response.status;
-                        response.json().then(body => (
-                            res.status(status).json(body)
-                        ));
+                        console.log('response with status', status);
+                        return res.status(status).json(body)
                     }
                 }).catch(err => {
                     return res.status(400).json(err)
@@ -152,30 +151,102 @@ const getAllTasks = async (req, res) => {
         });
 };
 
+// const getAllEvents = async (req, res) => {
+//     const {
+//         name
+//     } = req.body;
+//
+//     if (!name) {
+//         return res.status(400).json({message: 'username is empty'});
+//     }
+//
+//     users.userByName(name)
+//         .then(user => {
+//             console.log('user', user);
+//             events.getAllEvents(user.id)
+//                 .then((events) => {
+//                     console.log(events);
+//                     return res.status(200).json(events)
+//                 })
+//                 .catch(() => (res.status(500).json({message: 'something error'})));
+//         })
+//         .catch(error => {
+//             console.log(error);
+//             return res.status(500).json({message: 'something error'});
+//         });
+// };
+
 const getAllEvents = async (req, res) => {
     const {
-        name
-    } = req.body;
+        id
+    } = req.params;
 
-    if (!name) {
-        return res.status(400).json({message: 'username is empty'});
+    if (!id) {
+        return res.status(400).json({message: 'id is empty'});
     }
+    console.log('!KEY_____SECRET!', process.env.event_key, process.env.event_secret);
 
-    users.userByName(name)
-        .then(user => {
-            console.log('user', user);
-            events.getAllEvents(user.id)
-                .then((events) => {
-                    console.log(events);
-                    return res.status(200).json(events)
+    await fetch(`http://localhost:8003/events/all/user/${id}?key=${process.env.event_key}&secret=${process.env.event_secret}&token=${eventsToken}`, {
+        method: 'get',
+        headers: {'Content-Type': 'application/json'}})
+        .then(async response => {
+            console.log('first response status', response.status);
+            if (response.status === 449) {
+                console.log('response');
+                await response.json().then(async body => {
+                        console.log('first response body', body);
+                        eventsToken = body.token;
+                        console.log('event is ', eventsToken);
+
+                        await fetch(`http://localhost:8003/events/all/user/${id}?key=${process.env.event_key}&secret=${process.env.event_secret}&token=${eventsToken}`, {
+                            method: 'get',
+                            headers: {'Content-Type': 'application/json'}})
+                            .then(response => {
+                                const status = response.status;
+                                response.json().then(body => res.status(status).json(body));
+                            })
+                    }
+                );
+            } else {
+                console.log('second');
+                response.json().then(async body => {
+                    console.log('second response message', body.message);
+                    if (body.message === "expired token") {
+                        await fetch("http://localhost:8007/session/token/" + eventsToken + "/service/Events", {
+                            method: "post",
+                            headers: {'Content-Type': 'application/json'},
+                        }).then(response => {
+                            const status = response.status;
+
+                            response.json().then(async body => {
+                                tasksToken = body.token;
+
+                                await fetch(`http://localhost:8003/events/all/user/${id}?key=${process.env.event_key}&secret=${process.env.event_secret}&token=${eventsToken}`, {
+                                    method: 'get',
+                                    headers: {'Content-Type': 'application/json'}})
+                                    .then(response => {
+                                        const status = response.status;
+                                        response.json().then(body => res.status(status).json(body));
+                                    });
+
+                                res.status(status).json(body)
+                            });
+                        });
+                    } else {
+                        const status = response.status;
+                        console.log('response with status', status);
+                        return res.status(status).json(body)
+                    }
+                }).catch(err => {
+                    return res.status(400).json(err)
                 })
-                .catch(() => (res.status(500).json({message: 'something error'})));
+            }
         })
-        .catch(error => {
-            console.log(error);
-            return res.status(500).json({message: 'something error'});
+        .catch((error) => {
+            return res.status(400).json(error.message);
         });
 };
+
 
 const createTask = async (req, res) => {
     const {

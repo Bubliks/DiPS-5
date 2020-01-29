@@ -62,7 +62,7 @@ const publicMiddleware = async (req, res, next) => {
                 if (response.status === 200) {
                     return next();
                 } else {
-                    return res.sendStatus(401).json({});
+                    return res.status(401).json({message: 'error authorization'});
                 }
             })
         } else {
@@ -74,26 +74,26 @@ const publicMiddleware = async (req, res, next) => {
                 if (response.status === 200) {
                     return next();
                 } else {
-                    return res.sendStatus(401).json({});
+                    return res.status(401).json({message: 'error authorization'});
                 }
             });
         }
     } else {
         console.log('token or id indefined');
-        return res.status(401).json({});
+        return res.status(400).json({message: 'need login'});
     }
 };
 
-// router.post('/login', circuitBreakerUserMiddleware, controllers.users.login);
-// router.post('/register', circuitBreakerUserMiddleware, controllers.users.register);
-router.get('/all/from/:from/to/:to', circuitBreakerUserMiddleware, controllers.users.allFromTo);
 
-router.get('/all', publicMiddleware, circuitBreakerUserMiddleware, controllers.users.all);
 router.post('/user/:id/allTasks', publicMiddleware, circuitBreakerTaskMiddleware, controllers.getAllTasks);
-router.post('/user/:id/allEvents', publicMiddleware, circuitBreakerEventMiddleware, controllers.getAllEvents);
+router.post('/createTask', publicMiddleware, circuitBreakerTaskMiddleware, controllers.createTask);
 
-router.post('/createTask', circuitBreakerUserMiddleware, circuitBreakerTaskMiddleware, controllers.createTask);
-router.post('/createEvent', circuitBreakerUserMiddleware, circuitBreakerEventMiddleware, controllers.createEvent);
+router.post('/user/:id/allEvents', publicMiddleware, circuitBreakerEventMiddleware, controllers.getAllEvents);
+router.post('/createEvent', publicMiddleware, circuitBreakerEventMiddleware, controllers.createEvent);
+
+// общий доступ к этим ручкам
+router.get('/all/from/:from/to/:to', circuitBreakerUserMiddleware, controllers.users.allFromTo);
+router.get('/all', circuitBreakerUserMiddleware, controllers.users.all);
 
 // tasks 3, 6, 7
 router.post('/allEventsAndTasks', controllers.getEventsAndTasks);

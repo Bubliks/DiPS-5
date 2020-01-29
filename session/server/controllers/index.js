@@ -41,7 +41,7 @@ const createUserToken = async (req, res) => {
                     userId
                 }).then(data => (
                     res.status(201).json(data)
-                )).catch(err => (res.status(201).json({err})))
+                )).catch(err => (res.status(201).json(err)))
             } else {
                 console.log('update item');
                 await db.Session.update({
@@ -112,7 +112,7 @@ const checkUserToken = async (req, res) => {
             token,
             userId
         } = req.params;
-        console.log('\n!!!!start check!!!!');
+        console.log(`\nCheck userId: ${userId}, token: ${token}`);
         await db.Session.findOne({
             where: {
                 token,
@@ -120,8 +120,10 @@ const checkUserToken = async (req, res) => {
                 code: null
             }
         }).then(async data => {
+            console.log('userdata', data);
             const lastCheck = new Date(data.date);
             const curCheck = createDate();
+            console.log(lastCheck, curCheck);
 
             if (curCheck.getTime() < lastCheck.getTime()) {
                 await db.Session.update({
@@ -143,7 +145,7 @@ const checkUserToken = async (req, res) => {
             }
 
             console.log('older');
-            return res.status(200).json({checked: false});
+            return res.status(400).json({checked: false});
         });
     } catch (err) {
         console.log('error!!', err);

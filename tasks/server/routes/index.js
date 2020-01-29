@@ -51,10 +51,8 @@ const privateMiddleware = async (req, res, next) => {
 };
 
 router.get('/all/user/:id', privateMiddleware, controllers.allTasks);
-router.post('/create', (req, res) => (controllers.createTask(req, res)));
-router.post('/delete/task/:id', (req, res) => (controllers.deleteTask(req, res)));
+router.post('/create', privateMiddleware, controllers.createTask);
+router.post('/delete/task/:id', privateMiddleware, controllers.deleteTask);
 router.post('/ping', (req, res) => (res.status(200).json({})));
-
-// router.delete('/delete', (req, res) => (controllers.deleteTask(req, res)));
 
 module.exports = router;

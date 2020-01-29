@@ -30,6 +30,7 @@ const auth = async data => {
     }
 
     if (user.password !== createHmac('sha256', password).digest('hex')) {
+        console.log('ERROR!!!!!!!!!!');
         throw Error("invalid password");
     }
 
@@ -56,21 +57,18 @@ const authUser = async (req, res) => {
                     await fetch(`http://localhost:8007/session/user/${user.userId}/token/create`, {
                         method: "post",
                         headers: {'Content-Type': 'application/json'}
-                    })
-                        .then(sessionResp => {
-                            if (sessionResp.status >= 400) {
-                                throw new Error('some error');
-                            }
-                            console.log('created');
-                            return sessionResp.json();
-                        })
-                        .then(session => (
+                    }).then(sessionResp => {
+                        if (sessionResp.status >= 400) {
+                            throw new Error('some error');
+                        }
+                        console.log('created');
+                        return sessionResp.json();
+                    }).then(session => (
                             res.status(200).json({userId: user.userId, session})
-                        ))
-                        .catch(err => {
-                            console.log(`fail create: ${err}`);
-                            return res.status(500).json(err);
-                        });
+                    )).catch(err => {
+                        console.log(`fail create: ${err}`);
+                        return res.status(500).json(err);
+                    });
                 } else {
                     console.log(`update`);
                     await fetch(`http://localhost:8007/session/user/${user.userId}/token/update`, {
@@ -79,22 +77,23 @@ const authUser = async (req, res) => {
                         body: JSON.stringify({
                             userId: user.userId
                         })
-                    })
-                        .then(sessionResp => {
-                            if (sessionResp.status >= 400) {
-                                throw new Error('some error');
-                            }
-                            console.log('updated');
-                            return sessionResp.json();
-                        })
-                        .then(session => (
-                            res.status(200).json({userId: user.userId, session})
-                        ))
-                        .catch(err => {
-                            console.log(`fail update: ${err}`);
-                            return res.status(503).json({err});
-                        });
+                    }).then(sessionResp => {
+                        if (sessionResp.status >= 400) {
+                            throw new Error('some error');
+                        }
+                        console.log('updated');
+                        return sessionResp.json();
+                    }).then(session => (
+                        res.status(200).json({userId: user.userId, session})
+                    )).catch(err => {
+                        console.log(`fail update: ${err}`);
+                        return res.status(503).json({err});
+                    });
                 }
+            }).catch(err => {
+                return res
+                    .status(400)
+                    .json({message: 'login or password is invalid!'});
             });
         } else {
             return res

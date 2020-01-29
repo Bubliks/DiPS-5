@@ -120,7 +120,16 @@ const createCode = async (req, res) => {
         headers: {'Content-Type': 'application/json'}
     }).then(response => {
         console.log('ok', response);
-        res.status(response.status).json(response)
+        response
+            .json()
+            .then(body => {
+                console.log('create success');
+                return res.status(response.status).json(body);
+            })
+            .catch(err => {
+                console.log('fail');
+                return res.status(500).json(err);
+            });
     }).catch(err => {
         console.log('fail');
         return res.status(500).json(err);
@@ -132,31 +141,38 @@ const getToken = async (req, res) => {
         const {
             clientId,
             clientSecret,
-            type
+            type,
+            code,
+            refreshToken
         } = req.query;
+        console.log(`getToken, cliendId: ${clientId}, clientSecret: ${clientSecret}, type: ${type}, 'code: ${code}, refreshToken: ${refreshToken}`);
 
         if (type === 'auth_code') {
-            const code = req.query.code;
-            const response = await fetch(`http://localhost:3007/code/${code}/?clientId=${clientId}&clientSecret=${clientSecret}`, {
+            console.log('create token code');
+            const response = await fetch(`http://localhost:8007/session/code/${code}/?appId=${clientId}&appSecret=${clientSecret}`, {
                 method: "post",
                 headers: {'Content-Type': 'application/json'}
             });
 
+            const body = await response.json();
+
             return res
                 .status(response.status)
-                .json(response)
+                .json(body)
         }
 
         if (type === 'refresh_token') {
-            const refreshToken = req.query.refreshToken;
-            const response = await fetch(`http://localhost:3007/refreshToken/${refreshToken}/?clientId=${clientId}&clientSecret=${clientSecret}`, {
+            console.log('refresh token code');
+            const response = await fetch(`http://localhost:8007/session/refreshToken/${refreshToken}/?appId=${clientId}&appSecret=${clientSecret}`, {
                 method: "post",
                 headers: {'Content-Type': 'application/json'}
             });
 
+            const body = await response.json();
+
             return res
                 .status(response.status)
-                .json(response)
+                .json(body)
         }
     } catch (err) {
         return res.status(500).json(error);

@@ -4,7 +4,7 @@ const app = express();
 
 const port = process.env.PORT || 8009;
 
-const enableCors = true;
+const enableCors = false;
 
 if (enableCors) {
     const cors = require('cors');
@@ -32,7 +32,7 @@ if (enableCors) {
     });
 
     // Set up a whitelist and check against it:
-    var whitelist = ['http://localhost:3000', 'http://localhost:3000/login', 'http://localhost:3000/register', 'http://localhost:3000/home', 'http://localhost:3000/tasks', 'http://localhost:3000/tasksevents'];
+    var whitelist = ['http://localhost:3000', 'http://localhost:3000/login', 'http://localhost:3000/register', 'http://localhost:3000/home', 'http://localhost:3000/tasks', 'http://localhost:3000/tasksevents', 'http://localhost:3000/oauth'];
     var corsOptions = {
         origin: function (origin, callback) {
             if (whitelist.indexOf(origin) !== -1) {

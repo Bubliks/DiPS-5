@@ -55,7 +55,7 @@ const publicMiddleware = async (req, res, next) => {
         console.log('check token: ', token);
         if (appId) {
             console.log('for app');
-            await fetch(`http://localhost:8007/code/?userId=${req.params.id}&token=${token}`, {
+            await fetch(`http://localhost:8007/session/code/?userId=${req.params.id}&token=${token}`, {
                 method: "get",
                 headers: {'Content-Type': 'application/json'}
             }).then(response => {

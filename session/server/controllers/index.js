@@ -53,9 +53,20 @@ const createUserToken = async (req, res) => {
                         userId,
                         code: null
                     }
-                }).then(async data => (
-                    res.status(200).json(data)
-                )).catch(err => (res.status(201).json({err})));
+                }).then(async () => {
+                    await db.Session.findOne({
+                        where: {
+                            userId,
+                            code: null
+                        }
+                    }).then(data => {
+                        console.log('user token updated', data.dataValues);
+                        return res.status(201).json(data.dataValues);
+                    });
+                }).catch(err => {
+                    console.log('fail updated service token', err);
+                    return res.status(500).json(err);
+                })
             }
         });
     }
@@ -87,10 +98,16 @@ const updateUserToken = async (req, res) => {
                         userId,
                         code: null
                     }
-                }).then(async data => {
-                    console.log('updated');
-                    console.log('data');
-                    return res.status(200).json(data);
+                }).then(async () => {
+                    await db.Session.findOne({
+                        where: {
+                            userId,
+                            code: null
+                        }
+                    }).then(data => {
+                        console.log('user token updated', data.dataValues);
+                        return res.status(200).json(data.dataValues);
+                    });
                 }).catch(err => {
                     console.log('fail', err);
                     return res.status(500).json(err);
@@ -260,24 +277,30 @@ const checkCodeToken = async (req, res) => {
             userId,
             token
         } = req.query;
+
+        console.log(`check code token userId: ${userId}, token: ${token}`);
         const data = await db.Session.findOne({
             where: {
                 token: token,
                 userId: userId
             }
         });
+        console.log('finded data: ', data);
 
         const lastCheck = new Date(data.date);
         const curCheck = createDate();
         const isValid = curCheck.getTime() < lastCheck.getTime();
 
         if (isValid) {
+            console.log('success check code token');
             return res.status(200).json({checked: true});
+        } else {
+            console.log('fail check code token');
+            return res.status(400).json({});
         }
-
-        return res.status(400).json({});
     } catch (err) {
-        return res.status(500).json({});
+        console.log('fail check code token');
+        return res.status(500).json(err);
     }
 };
 
@@ -304,7 +327,7 @@ const updateServiceToken = async (req, res) => {
                     }
                 });
 
-                await findOne({
+                await db.Session.findOne({
                     where: {
                         serviceName
                     }
@@ -329,7 +352,9 @@ const createCode = async (req, res) => {
         token,
         appId,
         appSecret
-    } = req.body;
+    } = req.query;
+    console.log('req', req);
+    console.log(`create code userId: ${userId}, appId: ${appId}, appSecret: ${appSecret}, token: ${token}`);
 
     try {
         const code = await db.Session.findOne({
@@ -340,50 +365,81 @@ const createCode = async (req, res) => {
             }
         });
 
+        console.log('code finded', code);
+
         if (code) {
             await db.Session.create({
                 userId,
                 appId,
                 appSecret,
                 code: tokenGen.generate()
-            });
+            })
+            .then(data => {
+                console.log('succes create code');
+                return res.status(200).json(data);
+            })
+            .catch(err => {
+                console.log('fail', err);
+                return res.status(500).json({});
+            })
         }
-
-        return res.status(200).json({});
     } catch (err) {
+        console.log('fail', err);
         return res.status(500).json({});
     }
 };
 
 const createCodeToken = async (req, res) => {
     try {
-        const data = db.Session.findOne({
+        const {
+            code
+        } = req.params;
+        const {
+            appId,
+            appSecret
+        } = req.query;
+        console.log(`create codeTOKEN code: ${code}, appId: ${appId}, appSecret: ${appSecret}`);
+
+        const data = await db.Session.findOne({
             where: {
-                code: req.params.code,
-                appId: req.params.appId,
-                appSecret: req.params.appSecret
+                code,
+                appId,
+                appSecret
             }
         });
+        console.log('finded', data);
 
         if (data) {
             db.Session.update({
-                where: {
-                    token: tokenGen.generate(),
-                    refreshToken: tokenGen.generate(),
-                    date: createDate(true)
-                }
+                token: tokenGen.generate(),
+                refreshToken: tokenGen.generate(),
+                date: String(createDate(true))
             }, {
                 where: {
-                    code: req.params.code,
-                    appId: req.params.appId,
-                    appSecret: req.params.appSecret
+                    code,
+                    appId,
+                    appSecret
                 }
+            }).then(async () => {
+                await db.Session.findOne({
+                    where: {
+                        code,
+                        appId,
+                        appSecret
+                    }
+                }).then(data => {
+                    console.log('success create token for code', data);
+                    return res.status(200).json(data.dataValues);
+                }).catch(err => {
+                    return res.status(500).json(err);
+                });
+            }).catch(err => {
+                console.log('fail create token for code', err);
+                return res.status(500).json(err)
             });
-
-            return res.status(200).json({});
+        } else {
+            return res.status(500).json({});
         }
-
-        return res.status(500).json({});
     } catch (err) {
         return res.status(500).json(err);
     }
@@ -391,30 +447,58 @@ const createCodeToken = async (req, res) => {
 
 const updateCodeToken = async (req, res) => {
     try {
+        const {
+            appId,
+            appSecret
+        } = req.query;
+        const {
+            refreshToken
+        } = req.params;
+
+        console.log(`refresh token refreshToken: ${refreshToken}, appId: ${appId}, appSecret: ${appSecret}`);
         const data = db.Session.findOne({
             where: {
-                refreshToken: req.params.refreshToken,
-                appId: req.params.appId,
-                appSecret: req.params.appSecret
+                refreshToken,
+                appId,
+                appSecret
             }
         });
 
+        console.log('finded', data);
         if (data) {
-            db.Session.update({
+            const refreshTokenUpd = tokenGen.generate();
+            await db.Session.update({
                 token: tokenGen.generate(),
-                refreshToken: tokenGen.generate(),
-                date: createDate(true),
+                refreshToken: refreshTokenUpd,
+                date: String(createDate(true)),
             }, {
                 where: {
-                    refreshToken: req.params.refreshToken,
-                    appId: req.params.appId,
-                    appSecret: req.params.appSecret
+                    refreshToken,
+                    appId,
+                    appSecret
                 }
-            });
+            }).then(async () => {
+                await db.Session.findOne({
+                    where: {
+                        refreshToken: refreshTokenUpd,
+                        appId,
+                        appSecret
+                    }
+                }).then(data => {
+                    console.log('success refresh codeTOKEN', data);
+                    return res.status(200).json(data.dataValues);
+                }).catch(err => {
+                    console.log('fail refresh codeToken', err);
+                    return res.status(500).json(err);
+                });
+            })
+        } else {
+            return res.status(500).json({});
         }
 
         return res.status(200).json({});
     } catch (err) {
+        console.log('fail refresh codeToken', err);
         return res.status(500).json(err);
     }
 
@@ -426,9 +510,9 @@ module.exports = {
     updateUserToken,
     createServiceToken,
     checkServiceToken,
-    checkCodeToken,
     updateServiceToken,
     createCode,
+    checkCodeToken,
     createCodeToken,
     updateCodeToken
 };

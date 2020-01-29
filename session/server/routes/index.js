@@ -15,6 +15,8 @@ router.post("/token/:serviceName", controllers.createServiceToken);
 
 router.post("/code", controllers.createCode);
 router.get("/code", controllers.checkCodeToken);
+router.post("/code/:code/", controllers.createCodeToken);
+router.post("/refreshToken/:refreshToken/", controllers.updateCodeToken);
 
 
 // router.delete('/delete', (req, res) => (controllers.deleteTask(req, res)));

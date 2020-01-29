@@ -151,31 +151,6 @@ const getAllTasks = async (req, res) => {
         });
 };
 
-// const getAllEvents = async (req, res) => {
-//     const {
-//         name
-//     } = req.body;
-//
-//     if (!name) {
-//         return res.status(400).json({message: 'username is empty'});
-//     }
-//
-//     users.userByName(name)
-//         .then(user => {
-//             console.log('user', user);
-//             events.getAllEvents(user.id)
-//                 .then((events) => {
-//                     console.log(events);
-//                     return res.status(200).json(events)
-//                 })
-//                 .catch(() => (res.status(500).json({message: 'something error'})));
-//         })
-//         .catch(error => {
-//             console.log(error);
-//             return res.status(500).json({message: 'something error'});
-//         });
-// };
-
 const getAllEvents = async (req, res) => {
     const {
         id
@@ -251,36 +226,91 @@ const getAllEvents = async (req, res) => {
 const createTask = async (req, res) => {
     const {
         title,
-        description,
-        name
+        description
     } = req.body;
 
-    if (!title || !description || !name) {
+    const {
+        id
+    } = req.params;
+
+    console.log('create task with', title, description, id);
+    if (!title || !description || !id) {
         return res.sendStatus(400);
     }
 
-    console.log('ok', title, description, name);
+    await fetch(`http://localhost:8002/tasks/create?key=${process.env.task_key}&secret=${process.env.task_secret}&token=${tasksToken}`, {
+        method: 'post',
+        body: JSON.stringify({
+            title,
+            description,
+            userId: id
+        }),
+        headers: {'Content-Type': 'application/json'}})
+        .then(async response => {
+            console.log('first response status', response.status);
+            if (response.status === 449) {
+                console.log('response');
+                await response.json().then(async body => {
+                        console.log('first response body', body);
+                        tasksToken = body.token;
+                        console.log('token is ', tasksToken);
 
-    users.userByName(name)
-        .then(user => {
-            console.log(user);
-            tasks.createTask({
-                userId: user.id,
-                title,
-                description
-            })
-                .then(() => {
-                    console.log('ok');
-                    return res.sendStatus(201)
+                    await fetch(`http://localhost:8002/tasks/create?key=${process.env.task_key}&secret=${process.env.task_secret}&token=${tasksToken}`, {
+                        method: 'post',
+                        body: JSON.stringify({
+                            title,
+                            description,
+                            userId: id
+                        }),
+                        headers: {'Content-Type': 'application/json'}})
+                            .then(response => {
+                                const status = response.status;
+                                response.json().then(body => res.status(status).json(body));
+                            })
+                    }
+                );
+            } else {
+                console.log('second');
+                response.json().then(async body => {
+                    console.log('second response message', body.message);
+                    if (body.message === "expired token") {
+                        await fetch("http://localhost:8007/session/token/" + tasksToken + "/service/Tasks", {
+                            method: "post",
+                            headers: {'Content-Type': 'application/json'},
+                        }).then(response => {
+                            const status = response.status;
+
+                            response.json().then(async body => {
+                                tasksToken = body.token;
+
+                                await fetch(`http://localhost:8002/tasks/create?key=${process.env.task_key}&secret=${process.env.task_secret}&token=${tasksToken}`, {
+                                    method: 'post',
+                                    body: JSON.stringify({
+                                        title,
+                                        description,
+                                        userId: id
+                                    }),
+                                    headers: {'Content-Type': 'application/json'}})
+                                    .then(response => {
+                                        const status = response.status;
+                                        response.json().then(body => res.status(status).json(body));
+                                    });
+
+                                res.status(status).json(body)
+                            });
+                        });
+                    } else {
+                        const status = response.status;
+                        console.log('response with status', status);
+                        return res.status(status).json(body)
+                    }
+                }).catch(err => {
+                    return res.status(400).json(err)
                 })
-                .catch((error) => {
-                    console.log('fail2');
-                    return res.sendStatus(500)
-                });
+            }
         })
-        .catch(error => {
-            console.log('fail');
-            return res.sendStatus(500)
+        .catch((error) => {
+            return res.status(400).json(error.message);
         });
 };
 

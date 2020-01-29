@@ -86,7 +86,7 @@ const publicMiddleware = async (req, res, next) => {
 
 
 router.post('/user/:id/allTasks', publicMiddleware, circuitBreakerTaskMiddleware, controllers.getAllTasks);
-router.post('/createTask', publicMiddleware, circuitBreakerTaskMiddleware, controllers.createTask);
+router.post('/user/:id/createTask', publicMiddleware, circuitBreakerTaskMiddleware, controllers.createTask);
 
 router.post('/user/:id/allEvents', publicMiddleware, circuitBreakerEventMiddleware, controllers.getAllEvents);
 router.post('/createEvent', publicMiddleware, circuitBreakerEventMiddleware, controllers.createEvent);

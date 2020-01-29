@@ -4,7 +4,7 @@ const app = express();
 
 const port = process.env.PORT || 8009;
 
-const enableCors = true;
+const enableCors = false;
 
 if (enableCors) {
     const cors = require('cors');

@@ -22,7 +22,7 @@
     "heroku": "^7.35.0",
     "jest": "^24.9.0",
     "mysql2": "^2.0.2",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.7",
     "pg": "^7.14.0",
     "pg-hstore": "^2.3.3",
     "sequelize": "^5.19.2",
